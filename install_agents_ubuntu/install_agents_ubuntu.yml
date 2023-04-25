@@ -1,0 +1,7 @@
+---
+- name: install_agents_ubuntu
+  become_user: root
+  hosts: all
+  tasks:
+    - include_role:
+        name: carbonblack
