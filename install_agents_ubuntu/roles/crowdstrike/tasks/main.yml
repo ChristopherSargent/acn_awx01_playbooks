@@ -1,4 +1,4 @@
-- name: install prerequisites
+- name: install prerequisites for crowdstrike
   shell: apt update && apt install libnl-genl-3-200 -y && apt install libnl-utils -y
 
 - name: create folder
@@ -9,17 +9,17 @@
     mode: 0755
     state: directory
 
-- name: download falcon-sensor
+- name: download falcon-sensor for crowdstrike
   shell:
     chdir: /falcon
     cmd: wget http://10.0.21.40/falcon-sensor_6.53.0-15003_amd64.deb
 
-- name: carbon black install falcon-sensor
+- name: crowdstrike install falcon-sensor
   shell:
     chdir: /falcon
     cmd: dpkg -i falcon-sensor_6.53.0-15003_amd64.deb
 
-- name: carbon black falcon-sensor start with Customer ID
+- name: crowdstrike falcon-sensor start with Customer ID
   shell:
     cmd: /opt/CrowdStrike/falconctl -s --cid=F63837EE707D490AA1029B785AB2D248-91
 
