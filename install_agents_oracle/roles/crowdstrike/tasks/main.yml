@@ -1,0 +1,32 @@
+- name: install prerequisites for crowdstrike
+  shell: yum install wget libnl3.x86_64 -y
+
+- name: create folder
+  file:
+    path: /falcon
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: download falcon-sensor for crowdstrike
+  shell:
+    chdir: /falcon
+    cmd: wget http://10.0.21.40/falcon-sensor-6.53.0-15003.el8.x86_64.rpm
+
+- name: crowdstrike install falcon-sensor
+  shell:
+    chdir: /falcon
+    cmd: yum install falcon-sensor-6.53.0-15003.el8.x86_64.rpm -y
+
+- name: crowdstrike falcon-sensor start with Customer ID
+  shell:
+    cmd: /opt/CrowdStrike/falconctl -s --cid=F63837EE707D490AA1029B785AB2D248-91
+
+- name: enable falcon-sensor
+  shell: systemctl enable falcon-sensor
+
+- name: start falcon-sensor
+  shell: systemctl start falcon-sensor
+
+
