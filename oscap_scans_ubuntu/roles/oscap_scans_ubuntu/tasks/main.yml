@@ -1,0 +1,34 @@
+---
+# Use oscap.yml for variables
+- name: Load vars
+  include_vars: "oscap.yml"
+
+# Create oscap-reports directory
+- name: Create oscap directory
+  shell: mkdir -p /home/oscap-reports
+
+# Install compliance as code 0.1.67 for Ubuntu 22.04
+- name: Install compliance as code
+  shell: |
+    cd /root 
+    git clone -b v0.1.67 https://github.com/ComplianceAsCode/content.git
+    cd /root/content/build
+    apt update 
+    apt install cmake make expat libopenscap8 libxml2-utils ninja-build python3-jinja2 python3-yaml xsltproc -y
+    apt install shellcheck yamllint ansible-lint ninja-build python3-pip -y && pip3 install json2htm
+    cmake ../ && make -j4 && make install    
+
+# Run oscap using profile and policy defined in oscap.yml
+- name: run openscap
+  command: oscap xccdf eval \
+    --profile {{ oscap_profile }} \
+    --results-arf /tmp/oscap-arf.xml \
+    --report /home/oscap-reports/oscap-report.html \
+    --fetch-remote-resources \
+    /usr/local/share/xml/scap/ssg/content/{{ oscap_policy }}.xml
+  ignore_errors: true
+
+# Rename report with date and time stamp
+- name: Rename report
+  shell: "mv /home/oscap-reports/oscap-report.html /home/oscap-reports/`uname -n`.oscap-report.$(date +'%Y%m%d').html"
+

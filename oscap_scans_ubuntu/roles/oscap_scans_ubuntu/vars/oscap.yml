@@ -1,0 +1,4 @@
+# Oscap profile and policy for CIS Server Level1 Ubuntu 22.04
+oscap_profile: xccdf_org.ssgproject.content_profile_cis_level1_server
+oscap_policy: ssg-ubuntu2204-ds-1.2
+

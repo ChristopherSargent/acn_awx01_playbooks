@@ -1,0 +1,10 @@
+---
+# Master Playbook for wrair servers oscap Ubuntu 20.04 22.04
+
+- name: oscap_scans_ubuntu
+  become_user: root
+  hosts: all
+  tasks:
+    - include_role:
+        name: oscap_scans_ubuntu
+
